@@ -587,13 +587,13 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     _playerId =
         (await _videoPlayerPlatform.createWithOptions(creationOptions)) ??
         kUninitializedPlayerId;
+    _creatingCompleter!.complete(null);
+    final initializingCompleter = Completer<void>();
+
     if (videoPlayerOptions != null) {
-      await _videoPlayerPlatform.setAllowScreenAutoLock(
+      await _videoPlayerPlatform.setPreventsDisplaySleepDuringVideoPlayback(
         _playerId,
-        videoPlayerOptions.allowScreenAutoLock,
-      );
-    }
-        videoPlayerOptions!.allowScreenAutoLock,
+        videoPlayerOptions!.preventsDisplaySleepDuringVideoPlayback,
       );
     }
 

@@ -124,10 +124,10 @@ abstract class VideoPlayerPlatform extends PlatformInterface {
     );
   }
 
-  /// Sets whether the screen should be allowed to auto-lock during playback.
-  Future<void> setAllowScreenAutoLock(int playerId, bool allowScreenAutoLock) {
+  /// Sets whether the screen should be allowed to sleep during playback.
+  Future<void> setPreventsDisplaySleepDuringVideoPlayback(int playerId, bool preventsDisplaySleepDuringVideoPlayback) {
     throw UnimplementedError(
-      'setAllowScreenAutoLock() has not been implemented.',
+      'setPreventsDisplaySleepDuringVideoPlayback() has not been implemented.',
     );
   }
 
@@ -442,7 +442,7 @@ class VideoPlayerOptions {
   VideoPlayerOptions({
     this.mixWithOthers = false,
     this.allowBackgroundPlayback = false,
-    this.allowScreenAutoLock = false,
+    this.preventsDisplaySleepDuringVideoPlayback = true,
     this.webOptions,
   });
 
@@ -457,11 +457,11 @@ class VideoPlayerOptions {
   /// currently no way to implement this feature in this platform).
   final bool mixWithOthers;
 
-  /// Set this to true to allow the screen to auto-lock during video playback.
-  /// The default value is false, meaning the screen will stay awake during playback.
+  /// Set this to true to prevent the screen from sleeping during video playback.
+  /// The default value is true.
   ///
   /// This option is currently only supported on iOS and macOS.
-  final bool allowScreenAutoLock;
+  final bool preventsDisplaySleepDuringVideoPlayback;
 
   /// Additional web controls
   final VideoPlayerWebOptions? webOptions;

@@ -1954,17 +1954,17 @@ void main() {
         expect(controller.videoPlayerOptions!.mixWithOthers, true);
       });
 
-      test('setAllowScreenAutoLock', () async {
+      test('setPreventsDisplaySleepDuringVideoPlayback', () async {
         final controller = VideoPlayerController.networkUrl(
           _localhostUri,
-          videoPlayerOptions: VideoPlayerOptions(allowScreenAutoLock: true),
+          videoPlayerOptions: VideoPlayerOptions(preventsDisplaySleepDuringVideoPlayback: true),
         );
         addTearDown(controller.dispose);
 
         await controller.initialize();
-        expect(controller.videoPlayerOptions!.allowScreenAutoLock, true);
+        expect(controller.videoPlayerOptions!.preventsDisplaySleepDuringVideoPlayback, true);
         expect(
-          fakeVideoPlayerPlatform.calls.contains('setAllowScreenAutoLock'),
+          fakeVideoPlayerPlatform.calls.contains('setPreventsDisplaySleepDuringVideoPlayback'),
           true,
         );
       });
@@ -2243,11 +2243,11 @@ class FakeVideoPlayerPlatform extends VideoPlayerPlatform {
   }
 
   @override
-  Future<void> setAllowScreenAutoLock(
+  Future<void> setPreventsDisplaySleepDuringVideoPlayback(
     int playerId,
-    bool allowScreenAutoLock,
+    bool preventsDisplaySleepDuringVideoPlayback,
   ) async {
-    calls.add('setAllowScreenAutoLock');
+    calls.add('setPreventsDisplaySleepDuringVideoPlayback');
   }
 
   @override

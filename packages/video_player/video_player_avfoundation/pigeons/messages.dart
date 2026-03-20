@@ -93,6 +93,6 @@ abstract class VideoPlayerInstanceApi {
   List<MediaSelectionAudioTrackData> getAudioTracks();
   @ObjCSelector('selectAudioTrackAtIndex:')
   void selectAudioTrack(int trackIndex);
-  @ObjCSelector('setAllowScreenAutoLock:')
-  void setAllowScreenAutoLock(bool allowScreenAutoLock);
+  @ObjCSelector('setPreventsDisplaySleepDuringVideoPlayback:')
+  void setPreventsDisplaySleepDuringVideoPlayback(bool preventsDisplaySleepDuringVideoPlayback);
 }

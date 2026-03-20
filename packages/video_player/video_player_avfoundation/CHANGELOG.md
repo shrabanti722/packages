@@ -1,6 +1,6 @@
 ## 2.9.5
 
-* Implement screen auto-lock control for video playback.
+* Implements screen auto-lock control for video playback.
 
 ## 2.9.4
 

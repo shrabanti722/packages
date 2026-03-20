@@ -179,10 +179,10 @@ class AVFoundationVideoPlayer extends VideoPlayerPlatform {
   }
 
   @override
-  Future<void> setAllowScreenAutoLock(int playerId, bool allowScreenAutoLock) {
+  Future<void> setPreventsDisplaySleepDuringVideoPlayback(int playerId, bool preventsDisplaySleepDuringVideoPlayback) {
     return _playerWith(
       id: playerId,
-    ).setAllowScreenAutoLock(allowScreenAutoLock);
+    ).setPreventsDisplaySleepDuringVideoPlayback(preventsDisplaySleepDuringVideoPlayback);
   }
 
   @override
@@ -282,8 +282,8 @@ class _PlayerInstance {
 
   Future<void> setPlaybackSpeed(double speed) => _api.setPlaybackSpeed(speed);
 
-  Future<void> setAllowScreenAutoLock(bool allowScreenAutoLock) =>
-      _api.setAllowScreenAutoLock(allowScreenAutoLock);
+  Future<void> setPreventsDisplaySleepDuringVideoPlayback(bool preventsDisplaySleepDuringVideoPlayback) =>
+      _api.setPreventsDisplaySleepDuringVideoPlayback(preventsDisplaySleepDuringVideoPlayback);
 
   Future<void> seekTo(Duration position) {
     return _api.seekTo(position.inMilliseconds);
