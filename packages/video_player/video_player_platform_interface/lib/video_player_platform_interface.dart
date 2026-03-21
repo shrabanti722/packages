@@ -125,10 +125,11 @@ abstract class VideoPlayerPlatform extends PlatformInterface {
   }
 
   /// Sets whether the screen should be allowed to sleep during playback.
-  Future<void> setPreventsDisplaySleepDuringVideoPlayback(int playerId, bool preventsDisplaySleepDuringVideoPlayback) {
-    throw UnimplementedError(
-      'setPreventsDisplaySleepDuringVideoPlayback() has not been implemented.',
-    );
+  Future<void> setPreventsDisplaySleepDuringVideoPlayback(
+    int playerId,
+    bool preventsDisplaySleepDuringVideoPlayback,
+  ) {
+    return Future<void>.value();
   }
 
   /// Sets additional options on web.

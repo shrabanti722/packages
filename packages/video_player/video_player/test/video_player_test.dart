@@ -73,6 +73,11 @@ class FakeController extends ValueNotifier<VideoPlayerValue>
   Future<void> setLooping(bool looping) async {}
 
   @override
+  Future<void> setPreventsDisplaySleepDuringVideoPlayback(
+    bool prevents,
+  ) async {}
+
+  @override
   VideoFormat? get formatHint => null;
 
   @override
@@ -1858,7 +1863,8 @@ void main() {
           'volume: 0.5, '
           'playbackSpeed: 1.5, '
           'errorDescription: null, '
-          'isCompleted: false),',
+          'isCompleted: false, '
+          'preventsDisplaySleepDuringVideoPlayback: true),',
         );
       });
 
@@ -1955,16 +1961,19 @@ void main() {
       });
 
       test('setPreventsDisplaySleepDuringVideoPlayback', () async {
-        final controller = VideoPlayerController.networkUrl(
-          _localhostUri,
-          videoPlayerOptions: VideoPlayerOptions(preventsDisplaySleepDuringVideoPlayback: true),
-        );
+        final controller = VideoPlayerController.networkUrl(_localhostUri);
         addTearDown(controller.dispose);
 
         await controller.initialize();
-        expect(controller.videoPlayerOptions!.preventsDisplaySleepDuringVideoPlayback, true);
+        expect(controller.value.preventsDisplaySleepDuringVideoPlayback, true);
+
+        await controller.setPreventsDisplaySleepDuringVideoPlayback(false);
+        expect(controller.value.preventsDisplaySleepDuringVideoPlayback, false);
+
         expect(
-          fakeVideoPlayerPlatform.calls.contains('setPreventsDisplaySleepDuringVideoPlayback'),
+          fakeVideoPlayerPlatform.calls.contains(
+            'setPreventsDisplaySleepDuringVideoPlayback',
+          ),
           true,
         );
       });

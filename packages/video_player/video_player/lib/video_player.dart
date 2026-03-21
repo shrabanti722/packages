@@ -173,6 +173,7 @@ class VideoPlayerValue {
     this.rotationCorrection = 0,
     this.errorDescription,
     this.isCompleted = false,
+    this.preventsDisplaySleepDuringVideoPlayback = true,
   });
 
   /// Returns an instance for a video that hasn't been loaded.
@@ -239,6 +240,12 @@ class VideoPlayerValue {
   /// Does not update if video is looping.
   final bool isCompleted;
 
+  /// Set this to true to prevent the screen from sleeping during video playback.
+  /// The default value is true.
+  ///
+  /// This feature is currently only supported on iOS and macOS.
+  final bool preventsDisplaySleepDuringVideoPlayback;
+
   /// The [size] of the currently loaded video.
   final Size size;
 
@@ -287,6 +294,7 @@ class VideoPlayerValue {
     int? rotationCorrection,
     String? errorDescription = _defaultErrorDescription,
     bool? isCompleted,
+    bool? preventsDisplaySleepDuringVideoPlayback,
   }) {
     return VideoPlayerValue(
       duration: duration ?? this.duration,
@@ -306,6 +314,9 @@ class VideoPlayerValue {
           ? errorDescription
           : this.errorDescription,
       isCompleted: isCompleted ?? this.isCompleted,
+      preventsDisplaySleepDuringVideoPlayback:
+          preventsDisplaySleepDuringVideoPlayback ??
+          this.preventsDisplaySleepDuringVideoPlayback,
     );
   }
 
@@ -325,7 +336,8 @@ class VideoPlayerValue {
         'volume: $volume, '
         'playbackSpeed: $playbackSpeed, '
         'errorDescription: $errorDescription, '
-        'isCompleted: $isCompleted),';
+        'isCompleted: $isCompleted, '
+        'preventsDisplaySleepDuringVideoPlayback: $preventsDisplaySleepDuringVideoPlayback),';
   }
 
   @override
@@ -347,7 +359,9 @@ class VideoPlayerValue {
           size == other.size &&
           rotationCorrection == other.rotationCorrection &&
           isInitialized == other.isInitialized &&
-          isCompleted == other.isCompleted;
+          isCompleted == other.isCompleted &&
+          preventsDisplaySleepDuringVideoPlayback ==
+              other.preventsDisplaySleepDuringVideoPlayback;
 
   @override
   int get hashCode => Object.hash(
@@ -366,6 +380,7 @@ class VideoPlayerValue {
     rotationCorrection,
     isInitialized,
     isCompleted,
+    preventsDisplaySleepDuringVideoPlayback,
   );
 }
 
@@ -399,7 +414,14 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
        dataSourceType = platform_interface.DataSourceType.asset,
        formatHint = null,
        httpHeaders = const <String, String>{},
-       super(const VideoPlayerValue(duration: Duration.zero));
+       super(
+         VideoPlayerValue(
+           duration: Duration.zero,
+           preventsDisplaySleepDuringVideoPlayback:
+               videoPlayerOptions?.preventsDisplaySleepDuringVideoPlayback ??
+               true,
+         ),
+       );
 
   /// Constructs a [VideoPlayerController] playing a network video.
   ///
@@ -425,7 +447,14 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   }) : _closedCaptionFileFuture = closedCaptionFile,
        dataSourceType = platform_interface.DataSourceType.network,
        package = null,
-       super(const VideoPlayerValue(duration: Duration.zero));
+       super(
+         VideoPlayerValue(
+           duration: Duration.zero,
+           preventsDisplaySleepDuringVideoPlayback:
+               videoPlayerOptions?.preventsDisplaySleepDuringVideoPlayback ??
+               true,
+         ),
+       );
 
   /// Constructs a [VideoPlayerController] playing a network video.
   ///
@@ -447,7 +476,14 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
        dataSource = url.toString(),
        dataSourceType = platform_interface.DataSourceType.network,
        package = null,
-       super(const VideoPlayerValue(duration: Duration.zero));
+       super(
+         VideoPlayerValue(
+           duration: Duration.zero,
+           preventsDisplaySleepDuringVideoPlayback:
+               videoPlayerOptions?.preventsDisplaySleepDuringVideoPlayback ??
+               true,
+         ),
+       );
 
   /// Constructs a [VideoPlayerController] playing a video from a file.
   ///
@@ -464,7 +500,14 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
        dataSourceType = platform_interface.DataSourceType.file,
        package = null,
        formatHint = null,
-       super(const VideoPlayerValue(duration: Duration.zero));
+       super(
+         VideoPlayerValue(
+           duration: Duration.zero,
+           preventsDisplaySleepDuringVideoPlayback:
+               videoPlayerOptions?.preventsDisplaySleepDuringVideoPlayback ??
+               true,
+         ),
+       );
 
   /// Constructs a [VideoPlayerController] playing a video from a contentUri.
   ///
@@ -485,7 +528,14 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
        package = null,
        formatHint = null,
        httpHeaders = const <String, String>{},
-       super(const VideoPlayerValue(duration: Duration.zero));
+       super(
+         VideoPlayerValue(
+           duration: Duration.zero,
+           preventsDisplaySleepDuringVideoPlayback:
+               videoPlayerOptions?.preventsDisplaySleepDuringVideoPlayback ??
+               true,
+         ),
+       );
 
   /// The URI to the video file. This will be in different formats depending on
   /// the [DataSourceType] of the original video.
@@ -590,12 +640,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     _creatingCompleter!.complete(null);
     final initializingCompleter = Completer<void>();
 
-    if (videoPlayerOptions != null) {
-      await _videoPlayerPlatform.setPreventsDisplaySleepDuringVideoPlayback(
-        _playerId,
-        videoPlayerOptions!.preventsDisplaySleepDuringVideoPlayback,
-      );
-    }
+    await _videoPlayerPlatform.setPreventsDisplaySleepDuringVideoPlayback(
+      _playerId,
+      value.preventsDisplaySleepDuringVideoPlayback,
+    );
 
     // Apply the web-specific options
     if (kIsWeb && videoPlayerOptions?.webOptions != null) {
@@ -722,6 +770,18 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     await _applyLooping();
   }
 
+  /// Sets whether or not the screen should be prevented from sleeping during video playback.
+  /// See also [VideoPlayerValue.preventsDisplaySleepDuringVideoPlayback].
+  Future<void> setPreventsDisplaySleepDuringVideoPlayback(
+    bool preventsDisplaySleepDuringVideoPlayback,
+  ) async {
+    value = value.copyWith(
+      preventsDisplaySleepDuringVideoPlayback:
+          preventsDisplaySleepDuringVideoPlayback,
+    );
+    await _applyPreventsDisplaySleepDuringVideoPlayback();
+  }
+
   /// Pauses the video.
   Future<void> pause() async {
     value = value.copyWith(isPlaying: false);
@@ -733,6 +793,16 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       return;
     }
     await _videoPlayerPlatform.setLooping(_playerId, value.isLooping);
+  }
+
+  Future<void> _applyPreventsDisplaySleepDuringVideoPlayback() async {
+    if (_isDisposedOrNotInitialized) {
+      return;
+    }
+    await _videoPlayerPlatform.setPreventsDisplaySleepDuringVideoPlayback(
+      _playerId,
+      value.preventsDisplaySleepDuringVideoPlayback,
+    );
   }
 
   Future<void> _applyPlayPause() async {
