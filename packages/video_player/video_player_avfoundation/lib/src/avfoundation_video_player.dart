@@ -179,10 +179,13 @@ class AVFoundationVideoPlayer extends VideoPlayerPlatform {
   }
 
   @override
-  Future<void> setPreventsDisplaySleepDuringVideoPlayback(int playerId, bool preventsDisplaySleepDuringVideoPlayback) {
-    return _playerWith(
-      id: playerId,
-    ).setPreventsDisplaySleepDuringVideoPlayback(preventsDisplaySleepDuringVideoPlayback);
+  Future<void> setPreventsDisplaySleepDuringVideoPlayback(
+    int playerId,
+    bool preventsDisplaySleepDuringVideoPlayback,
+  ) {
+    return _playerWith(id: playerId).setPreventsDisplaySleepDuringVideoPlayback(
+      preventsDisplaySleepDuringVideoPlayback,
+    );
   }
 
   @override
@@ -282,8 +285,11 @@ class _PlayerInstance {
 
   Future<void> setPlaybackSpeed(double speed) => _api.setPlaybackSpeed(speed);
 
-  Future<void> setPreventsDisplaySleepDuringVideoPlayback(bool preventsDisplaySleepDuringVideoPlayback) =>
-      _api.setPreventsDisplaySleepDuringVideoPlayback(preventsDisplaySleepDuringVideoPlayback);
+  Future<void> setPreventsDisplaySleepDuringVideoPlayback(
+    bool preventsDisplaySleepDuringVideoPlayback,
+  ) => _api.setPreventsDisplaySleepDuringVideoPlayback(
+    preventsDisplaySleepDuringVideoPlayback,
+  );
 
   Future<void> seekTo(Duration position) {
     return _api.seekTo(position.inMilliseconds);

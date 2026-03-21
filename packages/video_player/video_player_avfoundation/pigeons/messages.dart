@@ -94,5 +94,7 @@ abstract class VideoPlayerInstanceApi {
   @ObjCSelector('selectAudioTrackAtIndex:')
   void selectAudioTrack(int trackIndex);
   @ObjCSelector('setPreventsDisplaySleepDuringVideoPlayback:')
-  void setPreventsDisplaySleepDuringVideoPlayback(bool preventsDisplaySleepDuringVideoPlayback);
+  void setPreventsDisplaySleepDuringVideoPlayback(
+    bool preventsDisplaySleepDuringVideoPlayback,
+  );
 }
