@@ -1,6 +1,7 @@
-## 2.9.5
+## 2.10.0
 
-* Implements screen auto-lock control for video playback.
+* Implements `setPreventsDisplaySleepDuringVideoPlayback` using
+  `AVPlayer.preventsDisplaySleepDuringVideoPlayback`.
 
 ## 2.9.4
 

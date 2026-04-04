@@ -1,6 +1,7 @@
-## 6.6.1
+## 6.7.0
 
-* Implements screen auto-lock control for video playback.
+* Adds `preventsDisplaySleepDuringVideoPlayback` to `VideoPlayerOptions` and
+  `setPreventsDisplaySleepDuringVideoPlayback` to `VideoPlayerPlatform`.
 * Updates minimum supported SDK version to Flutter 3.35/Dart 3.9.
 
 ## 6.6.0

@@ -240,10 +240,11 @@ class VideoPlayerValue {
   /// Does not update if video is looping.
   final bool isCompleted;
 
-  /// Set this to true to prevent the screen from sleeping during video playback.
-  /// The default value is true.
+  /// Whether the screen is prevented from sleeping during video playback.
   ///
-  /// This feature is currently only supported on iOS and macOS.
+  /// Defaults to `true`.
+  ///
+  /// This is currently only supported on iOS and macOS.
   final bool preventsDisplaySleepDuringVideoPlayback;
 
   /// The [size] of the currently loaded video.
@@ -770,7 +771,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     await _applyLooping();
   }
 
-  /// Sets whether or not the screen should be prevented from sleeping during video playback.
+  /// Sets whether the screen is prevented from sleeping during video playback.
+  ///
   /// See also [VideoPlayerValue.preventsDisplaySleepDuringVideoPlayback].
   Future<void> setPreventsDisplaySleepDuringVideoPlayback(
     bool preventsDisplaySleepDuringVideoPlayback,

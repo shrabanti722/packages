@@ -124,7 +124,7 @@ abstract class VideoPlayerPlatform extends PlatformInterface {
     );
   }
 
-  /// Sets whether the screen should be allowed to sleep during playback.
+  /// Sets whether the screen is prevented from sleeping during video playback.
   Future<void> setPreventsDisplaySleepDuringVideoPlayback(
     int playerId,
     bool preventsDisplaySleepDuringVideoPlayback,
@@ -458,8 +458,9 @@ class VideoPlayerOptions {
   /// currently no way to implement this feature in this platform).
   final bool mixWithOthers;
 
-  /// Set this to true to prevent the screen from sleeping during video playback.
-  /// The default value is true.
+  /// Whether the screen is prevented from sleeping during video playback.
+  ///
+  /// Defaults to `true`.
   ///
   /// This option is currently only supported on iOS and macOS.
   final bool preventsDisplaySleepDuringVideoPlayback;
